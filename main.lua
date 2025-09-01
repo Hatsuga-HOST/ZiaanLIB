@@ -1,5 +1,5 @@
 -- main.lua (ZiaanLIB Core - Full Updated)
--- Features: window/page/section system, element manager, theme/config, notifications, tweening, extras-ready
+-- Features: window/page/section system, element manager, theme/config, notifications, tweening, extras & elements integrated
 
 local ZiaanLIB = {}
 ZiaanLIB.Windows = {}
@@ -23,7 +23,27 @@ local Tooltip = require(script.Parent.extras.tooltip)
 local Screenshot = require(script.Parent.extras.screenshot)
 local ParticlePreview = require(script.Parent.extras.particlepreview)
 
--- Internal services
+-- Load elements
+local Button = require(script.Parent.elements.button)
+local Toggle = require(script.Parent.elements.toggle)
+local Slider = require(script.Parent.elements.slider)
+local Keybind = require(script.Parent.elements.keybind)
+local Dropdown = require(script.Parent.elements.dropdown)
+local Label = require(script.Parent.elements.label)
+local Textbox = require(script.Parent.elements.textbox)
+local Colorpicker = require(script.Parent.elements.colorpicker)
+local Progressbar = require(script.Parent.elements.progressbar)
+local Searchbox = require(script.Parent.elements.searchbox)
+local ImageElement = require(script.Parent.elements.image)
+local Timer = require(script.Parent.elements.timer)
+local Separator = require(script.Parent.elements.separator)
+local Grid = require(script.Parent.elements.grid)
+local Accordion = require(script.Parent.elements.accordion)
+local Tab = require(script.Parent.elements.tab)
+local SectionElem = require(script.Parent.elements.section)
+local MultiSelect = require(script.Parent.elements.multiSelect)
+
+-- Internal helpers
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
@@ -221,4 +241,16 @@ ZiaanLIB.Tooltip = Tooltip
 ZiaanLIB.Screenshot = Screenshot
 ZiaanLIB.ParticlePreview = ParticlePreview
 
-return ZiaanLIB
+-- Elements shortcuts
+ZiaanLIB.Button = Button
+ZiaanLIB.Toggle = Toggle
+ZiaanLIB.Slider = Slider
+ZiaanLIB.Keybind = Keybind
+ZiaanLIB.Dropdown = Dropdown
+ZiaanLIB.Label = Label
+ZiaanLIB.Textbox = Textbox
+ZiaanLIB.Colorpicker = Colorpicker
+ZiaanLIB.Progressbar = Progressbar
+ZiaanLIB.Searchbox = Searchbox
+ZiaanLIB.Image = ImageElement
+ZiaanLIB.Timer = Timer
