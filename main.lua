@@ -1,5 +1,5 @@
--- main.lua (ZiaanLIB Core)
--- Full version: window/page/element manager + theme/config + utils/extras integration
+-- main.lua (ZiaanLIB Core - Updated Full Version)
+-- Features: window/page/section system, element manager, theme/config, notifications, tweening, extras-ready
 
 local ZiaanLIB = {}
 ZiaanLIB.Windows = {}
@@ -12,20 +12,23 @@ local Tween = require(script.Parent.utils.tween)
 local Notifications = require(script.Parent.utils.notifications)
 local Input = require(script.Parent.utils.input)
 local Alignment = require(script.Parent.utils.alignment)
+local MathUtil = require(script.Parent.utils.math)
+local TableUtil = require(script.Parent.utils.table)
 
 -- Internal helpers
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
 
 -- Tween helper
-local function TweenObj(obj, properties, time, style, direction)
+function ZiaanLIB:Tween(obj, properties, time, style, direction)
     local info = TweenInfo.new(time or 0.25, style or Enum.EasingStyle.Quad, direction or Enum.EasingDirection.Out)
     local tween = TweenService:Create(obj, info, properties)
     tween:Play()
     return tween
 end
 
--- Window Creation
+-- Create Window
 function ZiaanLIB:CreateWindow(info)
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = info.Name or "ZiaanLIB"
@@ -53,7 +56,7 @@ function ZiaanLIB:CreateWindow(info)
     Title.TextSize = 24
     Title.Parent = Frame
 
-    -- Control Buttons: Close, Minimize, Maximize
+    -- Control Buttons
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Size = UDim2.new(0, 30, 0, 30)
     CloseBtn.Position = UDim2.new(1, -35, 0, 10)
@@ -64,7 +67,7 @@ function ZiaanLIB:CreateWindow(info)
     CloseBtn.TextSize = 18
     CloseBtn.Parent = Frame
     CloseBtn.MouseButton1Click:Connect(function()
-        ScreenGui:Destroy()
+        self:DestroyWindow({ScreenGui = ScreenGui})
     end)
 
     -- Dragging
@@ -97,12 +100,19 @@ function ZiaanLIB:CreateWindow(info)
         end
     end)
 
-    local WindowData = {ScreenGui = ScreenGui, Frame = Frame, Pages = {}, Elements = {}}
+    -- Window Data
+    local WindowData = {
+        ScreenGui = ScreenGui,
+        Frame = Frame,
+        Pages = {},
+        Elements = {},
+        Info = info
+    }
     table.insert(self.Windows, WindowData)
     return WindowData
 end
 
--- Page Creation
+-- Create Page
 function ZiaanLIB:CreatePage(window, name)
     local PageFrame = Instance.new("Frame")
     PageFrame.Size = UDim2.new(1, 0, 1, -50)
@@ -116,7 +126,7 @@ function ZiaanLIB:CreatePage(window, name)
     return Page
 end
 
--- Section Creation (for grouping elements)
+-- Create Section
 function ZiaanLIB:CreateSection(page, name)
     local SectionFrame = Instance.new("Frame")
     SectionFrame.Size = UDim2.new(1, 0, 0, 100)
@@ -138,7 +148,7 @@ function ZiaanLIB:CreateSection(page, name)
     return Section
 end
 
--- Register element to page or section
+-- Register Element
 function ZiaanLIB:RegisterElement(parent, element)
     table.insert(parent.Elements, element)
 end
@@ -152,7 +162,7 @@ function ZiaanLIB:SetTheme(name)
     end
 end
 
--- Update all windows and elements to current theme
+-- Update All Windows
 function ZiaanLIB:UpdateAllWindows()
     for _, win in pairs(self.Windows) do
         win.Frame.BackgroundColor3 = self.Themes.Current.Primary
@@ -166,7 +176,7 @@ function ZiaanLIB:UpdateAllWindows()
     end
 end
 
--- Notification
+-- Notifications
 function ZiaanLIB:Notify(title, text, type_)
     Notifications:Show(title, text, type_)
 end
@@ -182,14 +192,17 @@ function ZiaanLIB:LoadConfig()
     end
 end
 
--- Destroy window
+-- Destroy Window
 function ZiaanLIB:DestroyWindow(window)
     if window and window.ScreenGui then
         window.ScreenGui:Destroy()
+        for i, w in pairs(self.Windows) do
+            if w == window then
+                table.remove(self.Windows, i)
+                break
+            end
+        end
     end
 end
-
--- Global Tween helper
-ZiaanLIB.Tween = TweenObj
 
 return ZiaanLIB
