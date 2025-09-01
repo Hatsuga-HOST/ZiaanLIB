@@ -1,4 +1,4 @@
--- main.lua (ZiaanLIB Core - Updated Full Version)
+-- main.lua (ZiaanLIB Core - Full Updated)
 -- Features: window/page/section system, element manager, theme/config, notifications, tweening, extras-ready
 
 local ZiaanLIB = {}
@@ -14,6 +14,14 @@ local Input = require(script.Parent.utils.input)
 local Alignment = require(script.Parent.utils.alignment)
 local MathUtil = require(script.Parent.utils.math)
 local TableUtil = require(script.Parent.utils.table)
+
+-- Load extras placeholders
+local Console = require(script.Parent.extras.console)
+local HotkeyManager = require(script.Parent.extras.hotkeymanager)
+local Draggable = require(script.Parent.extras.draggable)
+local Tooltip = require(script.Parent.extras.tooltip)
+local Screenshot = require(script.Parent.extras.screenshot)
+local ParticlePreview = require(script.Parent.extras.particlepreview)
 
 -- Internal helpers
 local UserInputService = game:GetService("UserInputService")
@@ -204,5 +212,13 @@ function ZiaanLIB:DestroyWindow(window)
         end
     end
 end
+
+-- Extras shortcuts
+ZiaanLIB.Console = Console
+ZiaanLIB.HotkeyManager = HotkeyManager
+ZiaanLIB.Draggable = Draggable
+ZiaanLIB.Tooltip = Tooltip
+ZiaanLIB.Screenshot = Screenshot
+ZiaanLIB.ParticlePreview = ParticlePreview
 
 return ZiaanLIB
