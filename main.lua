@@ -15,7 +15,7 @@ local Alignment = require(script.Parent.utils.alignment)
 local MathUtil = require(script.Parent.utils.math)
 local TableUtil = require(script.Parent.utils.table)
 
--- Load extras placeholders
+-- Load extras
 local Console = require(script.Parent.extras.console)
 local HotkeyManager = require(script.Parent.extras.hotkeymanager)
 local Draggable = require(script.Parent.extras.draggable)
@@ -23,7 +23,7 @@ local Tooltip = require(script.Parent.extras.tooltip)
 local Screenshot = require(script.Parent.extras.screenshot)
 local ParticlePreview = require(script.Parent.extras.particlepreview)
 
--- Internal helpers
+-- Internal services
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
