@@ -1,86 +1,110 @@
--- themes.lua (ZiaanLIB)
--- Theme manager: preset + custom themes
+-- themes.lua - ZiaanLIB Maximal Theme Manager
 
 local Themes = {}
 
--- Default theme container
-Themes.Current = {}
-
 -- Preset Themes
-Themes.dark = {
-    Name = "Dark",
-    Primary = Color3.fromRGB(30,30,30),
-    Secondary = Color3.fromRGB(45,45,45),
-    Text = Color3.fromRGB(255,255,255),
-    Accent = Color3.fromRGB(0, 120, 255),
-    Border = Color3.fromRGB(70,70,70)
+Themes.Presets = {
+    dark = {
+        Name = "Dark",
+        Primary = Color3.fromRGB(30,30,30),
+        Secondary = Color3.fromRGB(45,45,45),
+        Accent = Color3.fromRGB(0,170,255),
+        Text = Color3.fromRGB(255,255,255)
+    },
+    light = {
+        Name = "Light",
+        Primary = Color3.fromRGB(245,245,245),
+        Secondary = Color3.fromRGB(220,220,220),
+        Accent = Color3.fromRGB(0,120,255),
+        Text = Color3.fromRGB(0,0,0)
+    },
+    neon = {
+        Name = "Neon",
+        Primary = Color3.fromRGB(0,0,0),
+        Secondary = Color3.fromRGB(25,25,25),
+        Accent = Color3.fromRGB(0,255,255),
+        Text = Color3.fromRGB(255,0,255)
+    },
+    pastel = {
+        Name = "Pastel",
+        Primary = Color3.fromRGB(255,228,225),
+        Secondary = Color3.fromRGB(255,240,245),
+        Accent = Color3.fromRGB(255,182,193),
+        Text = Color3.fromRGB(50,50,50)
+    },
+    retro = {
+        Name = "Retro",
+        Primary = Color3.fromRGB(50,50,50),
+        Secondary = Color3.fromRGB(100,100,100),
+        Accent = Color3.fromRGB(255,165,0),
+        Text = Color3.fromRGB(200,200,200)
+    },
+    cyberpunk = {
+        Name = "Cyberpunk",
+        Primary = Color3.fromRGB(10,10,10),
+        Secondary = Color3.fromRGB(25,0,40),
+        Accent = Color3.fromRGB(255,0,200),
+        Text = Color3.fromRGB(0,255,255)
+    },
+    classic = {
+        Name = "Classic",
+        Primary = Color3.fromRGB(35,35,35),
+        Secondary = Color3.fromRGB(50,50,50),
+        Accent = Color3.fromRGB(0,120,255),
+        Text = Color3.fromRGB(255,255,255)
+    },
+    custom = {
+        Name = "Custom",
+        Primary = Color3.fromRGB(255,255,255),
+        Secondary = Color3.fromRGB(200,200,200),
+        Accent = Color3.fromRGB(0,120,255),
+        Text = Color3.fromRGB(0,0,0)
+    }
 }
 
-Themes.light = {
-    Name = "Light",
-    Primary = Color3.fromRGB(240,240,240),
-    Secondary = Color3.fromRGB(220,220,220),
-    Text = Color3.fromRGB(20,20,20),
-    Accent = Color3.fromRGB(0, 120, 255),
-    Border = Color3.fromRGB(180,180,180)
-}
+-- Set current theme
+Themes.Current = Themes.Presets.classic
 
-Themes.neon = {
-    Name = "Neon",
-    Primary = Color3.fromRGB(10,10,10),
-    Secondary = Color3.fromRGB(20,20,20),
-    Text = Color3.fromRGB(255,255,255),
-    Accent = Color3.fromRGB(0,255,255),
-    Border = Color3.fromRGB(0,255,255)
-}
+-- Load preset theme by name
+function Themes:LoadPreset(name)
+    local preset = self.Presets[name]
+    if preset then
+        self.Current = preset
+        return preset
+    else
+        warn("[ZiaanLIB Themes] Preset not found:", name)
+        return self.Current
+    end
+end
 
-Themes.pastel = {
-    Name = "Pastel",
-    Primary = Color3.fromRGB(255, 223, 230),
-    Secondary = Color3.fromRGB(255, 240, 245),
-    Text = Color3.fromRGB(50,50,50),
-    Accent = Color3.fromRGB(255, 160, 180),
-    Border = Color3.fromRGB(200,180,190)
-}
+-- Set custom theme
+-- Example: Themes:SetCustom({Primary=Color3.new(), Secondary=..., Accent=..., Text=...})
+function Themes:SetCustom(tbl)
+    self.Presets.custom = tbl
+    self.Current = tbl
+end
 
-Themes.retro = {
-    Name = "Retro",
-    Primary = Color3.fromRGB(50,50,100),
-    Secondary = Color3.fromRGB(80,80,120),
-    Text = Color3.fromRGB(255,255,0),
-    Accent = Color3.fromRGB(255,0,0),
-    Border = Color3.fromRGB(100,100,150)
-}
+-- Update current theme colors individually
+function Themes:UpdateColors(tbl)
+    for k,v in pairs(tbl) do
+        if self.Current[k] ~= nil then
+            self.Current[k] = v
+        end
+    end
+end
 
-Themes.cyberpunk = {
-    Name = "Cyberpunk",
-    Primary = Color3.fromRGB(15,15,25),
-    Secondary = Color3.fromRGB(25,10,35),
-    Text = Color3.fromRGB(255,255,255),
-    Accent = Color3.fromRGB(255,0,255),
-    Border = Color3.fromRGB(50,0,50)
-}
+-- Get color by type (Primary, Secondary, Accent, Text)
+function Themes:GetColor(type_)
+    return self.Current[type_] or Color3.fromRGB(255,255,255)
+end
 
-Themes.classic = {
-    Name = "Classic",
-    Primary = Color3.fromRGB(34,34,34),
-    Secondary = Color3.fromRGB(50,50,50),
-    Text = Color3.fromRGB(255,255,255),
-    Accent = Color3.fromRGB(0,170,255),
-    Border = Color3.fromRGB(70,70,70)
-}
-
--- Custom theme placeholder
-Themes.custom = {
-    Name = "Custom",
-    Primary = Color3.fromRGB(40,40,40),
-    Secondary = Color3.fromRGB(60,60,60),
-    Text = Color3.fromRGB(255,255,255),
-    Accent = Color3.fromRGB(0,200,255),
-    Border = Color3.fromRGB(80,80,80)
-}
-
--- Set initial theme
-Themes.Current = Themes.classic
+-- List available presets
+function Themes:GetPresets()
+    local keys = {}
+    for k,_ in pairs(self.Presets) do
+        table.insert(keys,k)
+    end
+    return keys
+end
 
 return Themes
